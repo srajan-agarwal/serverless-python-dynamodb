@@ -21,7 +21,7 @@ Steps to Run
     3. Replace the <id> part with a real id from your employee table
          curl https://XXXXXXX.execute-api.us-east-1.amazonaws.com/employee/<id>
     4. Update employee 
-        # Replace the <id> part with a real id from your todos table
+        # Replace the <id> part with a real id from your employee table
         curl -X PUT https://XXXXXXX.execute-api.us-east-1.amazonaws.com/employee/<id> --data '{
        "name": "Suresh Mehta",
        "designation":"Admin",
