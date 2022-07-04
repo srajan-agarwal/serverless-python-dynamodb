@@ -1,0 +1,75 @@
+service: serverless-http-api-dynamodb
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.8
+  environment:
+    DYNAMODB_TABLE: ${self:service}-${sls:stage}
+  httpApi:
+    cors: true
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: "arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+
+functions:
+  create:
+    handler: employee/create.create
+    events:
+      - httpApi:
+          path: /employee
+          method: post
+
+  list:
+    handler: employee/list.list
+    events:
+      - httpApi:
+          path: /employee
+          method: get
+
+  get:
+    handler: employee/get.get
+    events:
+      - httpApi:
+          path: /employee/{id}
+          method: get
+  update:
+    handler: employee/update.update
+    events:
+      - httpApi:
+          path: /employee/{id}
+          method: put
+
+  delete:
+    handler: employee/delete.delete
+    events:
+      - httpApi:
+          path: /employee/{id}
+          method: delete
+
+
+resources:
+  Resources:
+    EmployeesDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
