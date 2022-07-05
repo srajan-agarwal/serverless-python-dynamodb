@@ -30,5 +30,6 @@ Steps to Run
     5. Delete employee
         # Replace the <id> part with a real id from your employee table
         curl -X DELETE https://XXXXXXX.execute-api.us-east-1.amazonaws.com/employee/<id>
+    6. Added github actions to deploy to cloudfront. check .github actions folder
 `
 
